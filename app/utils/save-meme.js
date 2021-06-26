@@ -1,11 +1,6 @@
 import * as MediaLibrary from 'expo-media-library';
 import { captureRef } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
-// import * as Permissions from 'expo-permissions';
-
-// export const saveMeme = async(viewRef) => {
-//   const { status } = Permissions.askAsync(Permissions.CAMERA_ROLL)
-// }
 
 export const saveMeme = async(viewRef) => {
   await MediaLibrary.requestPermissionsAsync()
@@ -21,13 +16,13 @@ export const saveMeme = async(viewRef) => {
     const album = await MediaLibrary.getAlbumAsync('nerdMeme');
     console.log(album, 'wut')
     
-    if(album.title != 'nerdMeme') { 
+    if(!album) { 
       const asset = await MediaLibrary.createAssetAsync(uri)
-      await MediaLibrary.createAlbumAsync('nerdMeme', asset)
+      return await MediaLibrary.createAlbumAsync('nerdMeme', asset, false)
     };
     const asset = await MediaLibrary.createAssetAsync(uri)
-    // return await MediaLibrary.addAssetsToAlbumAsync([uri], '2026658521');
-    return asset
+    await MediaLibrary.addAssetsToAlbumAsync([asset], '2026658521', false);
+    
 
   } catch (error) {
    console.log(error) 
