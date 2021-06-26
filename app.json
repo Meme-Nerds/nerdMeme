@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "nerdmeme",
+    "name": "nerdMeme",
     "slug": "nerdmeme",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,9 +17,13 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "nerdMeme",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.nerdmeme",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -27,6 +31,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "random meme generator."
   }
 }
