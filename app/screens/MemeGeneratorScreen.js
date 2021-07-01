@@ -9,13 +9,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import AppLoading from'expo-app-loading';
-import { useHistory } from 'react-router-native';
+import { useHistory, useParams } from 'react-router-native';
 import { getMeme } from '../utils/nerdmeme-api';
 import { saveMeme, shareMeme } from '../utils/save-meme';
 import colors from '../config/colors';
 
   const MemeGeneratorScreen = () => {
   const history = useHistory();
+  const { theme } = useParams() || null;
+  console.log(theme)
   const viewRef = useRef();
   const [loading, setLoading] = useState(true);
   const [meme, setMeme] = useState();
@@ -76,9 +78,10 @@ import colors from '../config/colors';
           source={{uri: meme.image}}
         />
         <Text 
-          style={(meme.quote.length < 30) 
+          style={[(meme.quote.length < 30) 
             ? styles.quote
-            : styles.longQuote} 
+            : styles.longQuote,
+          (theme === 'red') ? styles.redQuote : null]} 
         >
           {`"${meme.quote}"`}
         </Text>
@@ -183,6 +186,9 @@ const styles = StyleSheet.create({
     margin: 5,
     width: 300,
     textAlign: 'center'
+  },
+  redQuote: {
+    color: colors.red
   },
   longQuote: {
     color: 'white',

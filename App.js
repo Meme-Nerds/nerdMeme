@@ -16,8 +16,18 @@ export default function App() {
       <StatusBar />
       <NativeRouter>
         <Switch>
-          <Route exact path='/' component={WelcomeScreen} />
-          <Route exact path='/meme' component={MemeGeneratorScreen} />
+          <Route 
+            exact path='/' 
+            component={WelcomeScreen} 
+          />
+          <Route 
+            exact path='/meme' 
+            component={MemeGeneratorScreen}
+          />
+          <Route 
+            exact path='/meme/:theme' 
+            component={MemeGeneratorScreen}
+          />
         </Switch>
       </NativeRouter>
     </View>

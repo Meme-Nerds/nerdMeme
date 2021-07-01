@@ -29,6 +29,11 @@ const WelcomeScreen = () => {
         onPress={() => history.push('/meme')} >
         <Text style={styles.controlText}>Generate Meme!</Text>
       </TouchableOpacity>
+      <TouchableOpacity 
+        style={styles.control}
+        onPress={() => history.push('/meme/red')} >
+        <Text style={styles.controlText}>red theme</Text>
+      </TouchableOpacity>
     </View>
   )
 }
