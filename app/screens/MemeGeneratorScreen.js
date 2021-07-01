@@ -12,16 +12,24 @@ import AppLoading from'expo-app-loading';
 import { useHistory, useParams } from 'react-router-native';
 import { getMeme } from '../utils/nerdmeme-api';
 import { saveMeme, shareMeme } from '../utils/save-meme';
+import { useFonts } from 'expo-font';
 import colors from '../config/colors';
 
   const MemeGeneratorScreen = () => {
   const history = useHistory();
   const { theme } = useParams() || null;
-  console.log(theme)
   const viewRef = useRef();
   const [loading, setLoading] = useState(true);
   const [meme, setMeme] = useState();
   const [showSaveConfirm, setShowSaveConfirm] = useState(false);
+
+  let [fontsLoaded] = useFonts({
+    'orangejuice': require('../../assets/fonts/orange-juice-2.0.ttf'),
+    'seagram': require('../../assets/fonts/Seagram.ttf'),
+    'space-ranger': require('../../assets/fonts/spacerangerital.ttf'),
+    'black-list': require('../../assets/fonts/The-Blacklist.ttf'),
+    'arcade': require('../../assets/fonts/Arcade-Classic.ttf')
+  })
 
   useEffect(() => {
     getMeme()
@@ -44,8 +52,15 @@ import colors from '../config/colors';
     setShowSaveConfirm(false)
   }
   
-  if(loading) return (
+  if(loading || !fontsLoaded) return (
+    <View style={styles.loading} >
     <AppLoading />
+    <Text
+      style={[styles.controlText, styles.loadingText]}
+    >
+      Hang on! Meme generating at .5 past light speed!
+    </Text>
+    </View>
   )
 
   if(meme.error) return (
@@ -64,12 +79,14 @@ import colors from '../config/colors';
 
   return (
     <SafeAreaView >
-      <ScrollView contentContainerStyle={styles.scrollView} >
+      <ScrollView 
+        contentContainerStyle={styles.scrollView} >
       <View ref={viewRef} style={styles.container}>
         <Text 
-          style={(meme.setting.length < 20) 
+          style={[(meme.setting.length < 20) 
             ? styles.setting
-            : styles.longSetting} 
+            : styles.longSetting,
+            (theme) ? styles[`${theme}`] : null]} 
         >
           {meme.setting}
         </Text>
@@ -81,11 +98,16 @@ import colors from '../config/colors';
           style={[(meme.quote.length < 30) 
             ? styles.quote
             : styles.longQuote,
-          (theme === 'red') ? styles.redQuote : null]} 
+          (theme) ? styles[`${theme}Quote`] : null]} 
         >
           {`"${meme.quote}"`}
         </Text>
-        <Text style={styles.author} >{`-${meme.author}`}</Text>
+        <Text 
+          style={[styles.author, 
+            (theme) ? styles[`${theme}`] : null]}
+        >
+          {`-${meme.author}`}
+        </Text>
       </View>
       <View style={styles.controlBox}>
         <View style={styles.controlboxInner}>
@@ -187,8 +209,32 @@ const styles = StyleSheet.create({
     width: 300,
     textAlign: 'center'
   },
-  redQuote: {
-    color: colors.red
+  oldeQuote: {
+    color: colors.red,
+    fontFamily: 'seagram'
+  },
+  olde: {
+    fontFamily:'seagram'
+  },
+  spaceyQuote: {
+      fontFamily: 'space-ranger',
+      color: colors.blue
+  },
+  spacey: {
+    fontFamily: 'space-ranger'
+  },
+  fancyQuote: {
+    fontFamily: 'black-list'
+  },
+  fancy: {
+    fontFamily: 'black-list'
+  },
+  arcadeQuote: {
+    fontFamily: 'arcade',
+    color: colors.green
+  },
+  arcade: {
+    fontFamily: 'arcade'
   },
   longQuote: {
     color: 'white',
@@ -207,22 +253,19 @@ const styles = StyleSheet.create({
     marginTop: 20,
     padding: 10,
     width: 500,
-    backgroundColor: '#1a936f',
+    backgroundColor: colors.blue,
     alignItems: 'center',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
     
   },
-  controlBoxInner: {
-
-  },
   control: {
     width: 150,
     height: 30,
     margin: 10,
-    backgroundColor: '#d13065',
-    borderColor: '#16f7ac',
+    backgroundColor: colors.red,
+    borderColor: colors.lightGreen,
     borderStyle: 'solid',
     borderWidth: 2,
     borderRadius: 50,
@@ -248,7 +291,7 @@ const styles = StyleSheet.create({
     top: 200,
     alignSelf: 'center',
     height: 150,
-    backgroundColor: colors.green,
+    backgroundColor: colors.blue,
     borderStyle: 'solid',
     borderColor: colors.lightGreen,
     borderWidth: 3,
@@ -261,6 +304,16 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 1, height: 1},
     shadowOpacity: 0.2,
     shadowRadius: 15,
+  },
+  loading: {
+    padding: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  loadingText: {
+    fontSize: 18,
+    textAlign: 'center',
+    fontFamily: 'space-ranger'
   }
 })
 
